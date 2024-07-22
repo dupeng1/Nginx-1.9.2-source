@@ -1059,7 +1059,7 @@ ngx_http_process_request_line(ngx_event_t *rev) //ngx_http_process_request_line·
             if (r->http_version < NGX_HTTP_VERSION_10) { //1.0ÒÔÏÂ°æ±¾Ã»ÓÐÇëÇóÍ·²¿×Ö¶Î£¬
                 /*
                     ÓÃ»§ÇëÇóµÄHTTP°æ±¾Ð¡ÓÚ1.0£¨ÈçHTTP 0.9°æ±¾£©£¬Æä´¦Àí¹ý³Ì½«ÓëHTTP l.0ºÍHTTP l.1µÄÍêÈ«²»Í¬£¬Ëü²»»áÓÐ½ÓÊÕHTTP
-                    Í·²¿ÕâÒ»²½Öè¡£ÕâÊ±½«»áµ÷ÓÃngx_http_find_virtual_server·½·¨Ñ°ÕÒµ½ÏàÓ¦µÄÐéÄâÖ÷»ú£
+                    Í·²¿ÕâÒ»²½Öè¡£ÕâÊ±½«»áµ÷ÓÃngx_http_find_virtual_server·½·¨Ñ°ÕÒµ½ÏàÓ¦µÄÐéÄâÖ÷»ú?
                     */
                 if (r->headers_in.server.len == 0
                     && ngx_http_set_virtual_server(r, &r->headers_in.server) //http0.9Ó¦¸ÃÊÇ´ÓÇëÇóÐÐ»ñÈ¡ÐéÄâÖ÷»ú?
@@ -1693,8 +1693,8 @@ ngx_http_alloc_large_header_buffer(ngx_http_request_t *r,
 
 
 static ngx_int_t
-ngx_http_process_header_line(ngx_http_request_t *r, ngx_table_elt_t *h,
-    ngx_uint_t offset)
+/* ½âÎöÇëÇóÐÐ */
+ngx_http_process_header_line(ngx_http_request_t *r, ngx_table_elt_t *h, ngx_uint_t offset)
 {
     ngx_table_elt_t  **ph;
 
@@ -1736,6 +1736,7 @@ ngx_http_process_unique_header_line(ngx_http_request_t *r, ngx_table_elt_t *h,
 handlerµÄÈý¸ö²ÎÊý·Ö±ðÎª(r, h, hh->offset):rÎª¶ÔÓ¦µÄÁ¬½ÓÇëÇó£¬h´æ´¢ÎªÍ·²¿ÐÐkey:value(Èç:Content-Type: text/html)Öµ£¬hh->offset¼´
 ngx_http_headers_inÖÐ³ÉÔ±µÄ¶ÔÓ¦offset(ÈçÇëÇóÐÐ´øÓÐhost£¬Ôòoffset=offsetof(ngx_http_headers_in_t, host))
 */
+// ´¦ÀíheaderµÄhostÍ·
 static ngx_int_t
 ngx_http_process_host(ngx_http_request_t *r, ngx_table_elt_t *h,
     ngx_uint_t offset) //¸ù¾ÝÇëÇóÖÐµÄhostÀ´½øÐÐserver²éÕÒºÍ¶¨Î»
@@ -1777,6 +1778,7 @@ ngx_http_process_host(ngx_http_request_t *r, ngx_table_elt_t *h,
 }
 
 
+// ´¦ÀíheaderµÄconnectionÍ·
 static ngx_int_t
 ngx_http_process_connection(ngx_http_request_t *r, ngx_table_elt_t *h,
     ngx_uint_t offset)
@@ -1792,6 +1794,7 @@ ngx_http_process_connection(ngx_http_request_t *r, ngx_table_elt_t *h,
 }
 
 
+// ´¦ÀíheaderµÄuser_agentÍ·
 static ngx_int_t
 ngx_http_process_user_agent(ngx_http_request_t *r, ngx_table_elt_t *h,
     ngx_uint_t offset)
@@ -1805,7 +1808,7 @@ ngx_http_process_user_agent(ngx_http_request_t *r, ngx_table_elt_t *h,
     r->headers_in.user_agent = h;
 
     /* check some widespread browsers while the header is in CPU cache */
-
+    // ¸ù¾Ýuser_agentÍ·µÄÖµÉèÖÃheaders_inµÄ±êÊ¶Î»
     user_agent = h->value.data;
 
     msie = ngx_strstrn(user_agent, "MSIE ", 5 - 1);

@@ -29,9 +29,11 @@ static void ngx_close_accepted_connection(ngx_connection_t *c);
     最后，如果监听事件的available标志位为1，再次循环到第1步，否则ngx_event_accept方法结束。事件的available标志位对应着multi_accept配置
     项。当available为l时，告诉Nginx -次性尽量多地建立新连接，它的实现原理也就在这里
 */
-//这里的event是在ngx_event_process_init中从连接池中获取的 ngx_connection_t中的->read读事件
-//accept是在ngx_event_process_init(但进程或者不配置负载均衡的时候)或者(多进程，配置负载均衡)的时候把accept事件添加到epoll中
-void //该形参中的ngx_connection_t(ngx_event_t)是为accept事件连接准备的空间，当accept返回成功后，会重新获取一个ngx_connection_t(ngx_event_t)用来读写该连接
+// 这里的event是在ngx_event_process_init中从连接池中获取的 ngx_connection_t中的->read读事件
+// accept是在ngx_event_process_init(但进程或者不配置负载均衡的时候)或者(多进程，配置负载均衡)的时候把accept事件添加到epoll中
+// 该形参中的ngx_connection_t(ngx_event_t)是为accept事件连接准备的空间，
+// 当accept返回成功后，会重新获取一个ngx_connection_t(ngx_event_t)用来读写该连接
+void 
 ngx_event_accept(ngx_event_t *ev) //在ngx_process_events_and_timers中执行              
 { //一个accept事件对应一个ev，如当前一次有4个客户端accept，应该对应4个ev事件，一次来多个accept的处理在下面的do {}while中实现
     socklen_t          socklen;
@@ -145,8 +147,9 @@ ngx_event_accept(ngx_event_t *ev) //在ngx_process_events_and_timers中执行
                         ngx_shmtx_unlock(&ngx_accept_mutex);
                         ngx_accept_mutex_held = 0;
                     }
-//当前进程连接accpet失败，则可以暂时设置为1，下次来的时候由其他进程竞争accpet锁，下下次该进程继续竞争该accept，因为在下次的时候ngx_process_events_and_timers
-//ngx_accept_disabled = 1; 减去1后为0，可以继续竞争
+                    //当前进程连接accpet失败，则可以暂时设置为1，下次来的时候由其他进程竞争accpet锁，下下次该进程继续竞争该accept，
+                    //因为在下次的时候ngx_process_events_and_timers
+                    //ngx_accept_disabled = 1; 减去1后为0，可以继续竞争
                     ngx_accept_disabled = 1; 
                 } else { ////如果是不需要实现负载均衡，则扫尾延时下继续在ngx_process_events_and_timers中accept
                     ngx_add_timer(ev, ecf->accept_mutex_delay, NGX_FUNC_LINE);
@@ -163,8 +166,9 @@ ngx_event_accept(ngx_event_t *ev) //在ngx_process_events_and_timers中执行
         ngx_accept_disabled = ngx_cycle->connection_n / 8
                               - ngx_cycle->free_connection_n; //判断可用连接的数目和总数目的八分之一大小，如果可用的小于八分之一，为正
 
-        //在服务器端accept客户端连接成功(ngx_event_accept)后，会通过ngx_get_connection从连接池获取一个ngx_connection_t结构，也就是每个客户端连接对于一个ngx_connection_t结构，
-        //并且为其分配一个ngx_http_connection_t结构，ngx_connection_t->data = ngx_http_connection_t，见ngx_http_init_connection
+        //在服务器端accept客户端连接成功(ngx_event_accept)后，会通过ngx_get_connection从连接池获取一个ngx_connection_t结构，
+        //也就是每个客户端连接对于一个ngx_connection_t结构，并且为其分配一个ngx_http_connection_t结构，
+        //ngx_connection_t->data = ngx_http_connection_t，见ngx_http_init_connection
 
         //从连接池中获取一个空闲ngx_connection_t，用于客户端连接建立成功后向该连接读写数据，函数形参中的ngx_event_t对应的是为accept事件对应的
         //ngx_connection_t中对应的event
@@ -183,7 +187,7 @@ ngx_event_accept(ngx_event_t *ev) //在ngx_process_events_and_timers中执行
 #if (NGX_STAT_STUB)
         (void) ngx_atomic_fetch_add(ngx_stat_active, 1);
 #endif
-
+        // pool指针建立内存池，这个连接释放到空闲连接池时，释放pool内存池
         c->pool = ngx_create_pool(ls->pool_size, ev->log);
         if (c->pool == NULL) {
             ngx_close_accepted_connection(c);

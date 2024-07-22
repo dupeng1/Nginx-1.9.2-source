@@ -607,15 +607,15 @@ limit_except GET {
       NGX_HTTP_LOC_CONF_OFFSET,
       0,
       NULL },
-/*
-HTTPÇëÇó°üÌåµÄ×î´óÖµ
-Óï·¨£ºclient_max_body_size size;
-Ä¬ÈÏ£ºclient_max_body_size 1m;
-ÅäÖÃ¿é£ºhttp¡¢server¡¢location
-ä¯ÀÀÆ÷ÔÚ·¢ËÍº¬ÓĞ½Ï´óHTTP°üÌåµÄÇëÇóÊ±£¬ÆäÍ·²¿»áÓĞÒ»¸öContent-Length×Ö¶Î£¬client_max_body_sizeÊÇÓÃÀ´ÏŞÖÆContent-LengthËùÊ¾ÖµµÄ´óĞ¡µÄ¡£Òò´Ë£¬
-Õâ¸öÏŞÖÆ°üÌåµÄÅäÖÃ·Ç³£ÓĞÓÃ´¦£¬ÒòÎª²»ÓÃµÈNginx½ÓÊÕÍêËùÓĞµÄHTTP°üÌå¡ªÕâÓĞ¿ÉÄÜÏûºÄºÜ³¤Ê±¼ä¡ª¾Í¿ÉÒÔ¸æËßÓÃ»§ÇëÇó¹ı´ó²»±»½ÓÊÜ¡£ÀıÈç£¬ÓÃ»§ÊÔÍ¼
-ÉÏ´«Ò»¸ö10GBµÄÎÄ¼ş£¬NginxÔÚÊÕÍê°üÍ·ºó£¬·¢ÏÖContent-Length³¬¹ıclient_max_body_size¶¨ÒåµÄÖµ£¬¾ÍÖ±½Ó·¢ËÍ413 ("Request Entity Too Large")ÏìÓ¦¸ø¿Í»§¶Ë¡£
-*/
+    /*
+    HTTPÇëÇó°üÌåµÄ×î´óÖµ
+    Óï·¨£ºclient_max_body_size size;
+    Ä¬ÈÏ£ºclient_max_body_size 1m;
+    ÅäÖÃ¿é£ºhttp¡¢server¡¢location
+    ä¯ÀÀÆ÷ÔÚ·¢ËÍº¬ÓĞ½Ï´óHTTP°üÌåµÄÇëÇóÊ±£¬ÆäÍ·²¿»áÓĞÒ»¸öContent-Length×Ö¶Î£¬client_max_body_sizeÊÇÓÃÀ´ÏŞÖÆContent-LengthËùÊ¾ÖµµÄ´óĞ¡µÄ¡£Òò´Ë£¬
+    Õâ¸öÏŞÖÆ°üÌåµÄÅäÖÃ·Ç³£ÓĞÓÃ´¦£¬ÒòÎª²»ÓÃµÈNginx½ÓÊÕÍêËùÓĞµÄHTTP°üÌå¡ªÕâÓĞ¿ÉÄÜÏûºÄºÜ³¤Ê±¼ä¡ª¾Í¿ÉÒÔ¸æËßÓÃ»§ÇëÇó¹ı´ó²»±»½ÓÊÜ¡£ÀıÈç£¬ÓÃ»§ÊÔÍ¼
+    ÉÏ´«Ò»¸ö10GBµÄÎÄ¼ş£¬NginxÔÚÊÕÍê°üÍ·ºó£¬·¢ÏÖContent-Length³¬¹ıclient_max_body_size¶¨ÒåµÄÖµ£¬¾ÍÖ±½Ó·¢ËÍ413 ("Request Entity Too Large")ÏìÓ¦¸ø¿Í»§¶Ë¡£
+    */
     { ngx_string("client_max_body_size"),
       NGX_HTTP_MAIN_CONF|NGX_HTTP_SRV_CONF|NGX_HTTP_LOC_CONF|NGX_CONF_TAKE1,
       ngx_conf_set_off_slot,
@@ -623,14 +623,14 @@ HTTPÇëÇó°üÌåµÄ×î´óÖµ
       offsetof(ngx_http_core_loc_conf_t, client_max_body_size),
       NULL },
 
-/*
-´æ´¢HTTPÍ·²¿µÄÄÚ´æbuffer´óĞ¡
-Óï·¨£ºclient_header_buffer_size size;
-Ä¬ÈÏ£ºclient_header_buffer_size 1k;
-ÅäÖÃ¿é£ºhttp¡¢server
-ÉÏÃæÅäÖÃÏî¶¨ÒåÁËÕı³£Çé¿öÏÂNginx½ÓÊÕÓÃ»§ÇëÇóÖĞHTTP header²¿·Ö£¨°üÀ¨HTTPĞĞºÍHTTPÍ·²¿£©Ê±·ÖÅäµÄÄÚ´æbuffer´óĞ¡¡£ÓĞÊ±£¬
-ÇëÇóÖĞµÄHTTP header²¿·Ö¿ÉÄÜ»á³¬¹ıÕâ¸ö´óĞ¡£¬ÕâÊ±large_client_header_buffers¶¨ÒåµÄbuffer½«»áÉúĞ§¡£
-*/
+    /*
+    ´æ´¢HTTPÍ·²¿µÄÄÚ´æbuffer´óĞ¡
+    Óï·¨£ºclient_header_buffer_size size;
+    Ä¬ÈÏ£ºclient_header_buffer_size 1k;
+    ÅäÖÃ¿é£ºhttp¡¢server
+    ÉÏÃæÅäÖÃÏî¶¨ÒåÁËÕı³£Çé¿öÏÂNginx½ÓÊÕÓÃ»§ÇëÇóÖĞHTTP header²¿·Ö£¨°üÀ¨HTTPĞĞºÍHTTPÍ·²¿£©Ê±·ÖÅäµÄÄÚ´æbuffer´óĞ¡¡£ÓĞÊ±£¬
+    ÇëÇóÖĞµÄHTTP header²¿·Ö¿ÉÄÜ»á³¬¹ıÕâ¸ö´óĞ¡£¬ÕâÊ±large_client_header_buffers¶¨ÒåµÄbuffer½«»áÉúĞ§¡£
+    */
     { ngx_string("client_body_buffer_size"),
       NGX_HTTP_MAIN_CONF|NGX_HTTP_SRV_CONF|NGX_HTTP_LOC_CONF|NGX_CONF_TAKE1,
       ngx_conf_set_size_slot,
@@ -2065,7 +2065,7 @@ ngx_http_core_find_config_phase(ngx_http_request_t *r,
     clcf = ngx_http_get_module_loc_conf(r, ngx_http_core_module);//ÓÃ¸ÕÕÒµ½µÄloc_conf£¬µÃµ½Æähttp_coreÄ£¿éµÄÎ»ÖÃÅäÖÃ¡£
 
     /* ¸Ãlocation{}±ØĞëÊÇÄÚ²¿ÖØ¶¨Ïò(indexÖØ¶¨Ïò ¡¢error_pagesµÈÖØ¶¨Ïòµ÷ÓÃngx_http_internal_redirect)ºóÆ¥ÅäµÄlocation{}£¬·ñÔò²»ÈÃ·ÃÎÊ¸Ãlocation */
-    if (!r->internal && clcf->internal) { //ÊÇ·ñÊÇiÔÚÄÚ²¿ÖØ¶¨Ïò£¬Èç¹ûÊÇ£¬ÖĞ¶ÏÂğ å
+    if (!r->internal && clcf->internal) { //ÊÇ·ñÊÇiÔÚÄÚ²¿ÖØ¶¨Ïò£¬Èç¹ûÊÇ£¬ÖĞ¶ÏÂğ ?
         ngx_http_finalize_request(r, NGX_HTTP_NOT_FOUND);
         return NGX_OK;
     }

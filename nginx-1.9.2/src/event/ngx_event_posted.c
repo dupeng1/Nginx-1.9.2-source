@@ -46,7 +46,7 @@ post事件队列的操作方法
 ┃                                                  ┃或者ngx_posted_accept_events  ┃                                    ┃
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━┻━━━━━━━━━━━━━━━┻━━━━━━━━━━━━━━━━━━┛
 */
-//从posted队列中却出所有ev并执行各个事件的handler
+//从posted队列中取出所有ev并执行各个事件的handler
 void
 ngx_event_process_posted(ngx_cycle_t *cycle, ngx_queue_t *posted)
 {
